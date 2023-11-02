@@ -7,12 +7,12 @@ from typing import List
 import re
 
 
-def filter_datum(fields: List[str], redaction:
-                 str, message: str, seperator: str) -> str:
-    """Basic loggin function"""
+def filter_datum(fields: List[str], redaction: str, message: str,
+                 separator: str) -> str:
+    """ Basic login function """
     for specifics in fields:
-        message = re.sub(rf"{specifics}=(.*?)\{seperator}",
-                         f"{specifics}={redaction}{seperator}", message)
+        message = re.sub(rf"{specifics}=(.*?)\{separator}",
+                         f'{specifics}={redaction}{separator}', message)
     return message
 
 # Coded by EnGentech
