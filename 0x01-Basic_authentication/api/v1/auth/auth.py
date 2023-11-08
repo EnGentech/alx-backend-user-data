@@ -14,14 +14,14 @@ class Auth:
         """
         return False for now
         """
-        if path is None or excluded_paths is None or excluded_paths == []:
+        check = path
+        if path is None or excluded_paths is None or len(excluded_paths) == 0:
             return True
-        if not path.endswith('/'):
-            path = path + '/'
-        for route in excluded_paths:
-            if not route.endswith('/'):
-                route = route + '/'
-        return False if path in excluded_paths else True
+        if path[-1] != "/":
+            check += "/"
+        if check in excluded_paths or path in excluded_paths:
+            return False
+        return True
 
     def authorization_header(self, request=None) -> str:
         """
