@@ -50,14 +50,19 @@ class BasicAuth(Auth):
     def user_object_from_credentials(
             self, user_email: str, user_pwd: str) -> TypeVar('User'):
         """object credentials method"""
-        if user_email is None or type(user_email) is not str:
-            return None
-        if user_pwd is None or type(user_pwd) is not str:
-            return None
-        users = User.search({'email': user_email})
-        if not users:
-            return None
-        for user in users:
-            if user.is_valid_password(user_pwd):
-                return user
-        return None
+        decoded_64 = decoded_base64_authorization_header
+        if (decoded_64 and isinstance(decoded_64, str) and
+                ":" in decoded_64):
+            res = decoded_64.split(":", 1)
+            return (res[0], res[1])
+        return (None, None)
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        overloads Auth and retrieves the User instance for a request
+        """
+        header = self.authorization_header(request)
+        b64header = self.extract_base64_authorization_header(header)
+        decoded = self.decode_base64_authorization_header(b64header)
+        user_creds = self.extract_user_credentials(decoded)
+        return self.user_object_from_credentials(*user_creds)
