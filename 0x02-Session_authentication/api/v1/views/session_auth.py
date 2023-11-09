@@ -4,7 +4,7 @@
 
 
 from api.v1.views import app_views
-from flask import request, jsonify
+from flask import request, jsonify, abort
 from models.user import User
 import os
 
@@ -34,3 +34,14 @@ def login():
             return jsonify({"error": "wrong password"}), 401
     else:
         return jsonify({"error": "no user found for this email"}), 404
+
+@app_views.route("/auth_session/login",
+                 methods=["DELETE"], strict_slashes=False)
+def delete_route():
+    """A route for delete request"""
+    from api.v1.app import auth
+    destroy = auth.destroy_session(request)
+    if destroy == False:
+        abort(404)
+    else:
+        return jsonify({}), 200
