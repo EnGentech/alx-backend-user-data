@@ -5,6 +5,7 @@
 
 from api.v1.auth.auth import Auth
 from uuid import uuid4
+from api.v1.views import User
 
 
 class SessionAuth(Auth):
@@ -28,3 +29,9 @@ class SessionAuth(Auth):
                 or type(session_id) is not str:
             return None
         return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """current user validation"""
+        key = self.session_cookie(request)
+        obtained = self.user_id_for_session_id(key)
+        return User.get(obtained)
