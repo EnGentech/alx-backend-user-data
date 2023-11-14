@@ -42,12 +42,13 @@ class DB:
 
     def find_user_by(self, **kwargs):
         """return keyword argument"""
+        VALID_FIELDS = ['id', 'email', 'hashed_password', 'session_id',
+                'reset_token']
 
-        if hasattr(User, str(kwargs.keys)):
+        if not kwargs or any(x not in VALID_FIELDS for x in kwargs):
             raise InvalidRequestError
         session = self._session
         try:
-            response = session.query(User).filter_by(**kwargs).one()
-            return response
+            return session.query(User).filter_by(**kwargs).one()
         except Exception:
             raise NoResultFound
