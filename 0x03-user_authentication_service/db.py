@@ -32,7 +32,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email: str, hashed_password: str) -> str:
+    def add_user(self, email: str, hashed_password: str) -> User:
         """return User object and save to db"""
         if not email or not hashed_password:
             return
@@ -41,7 +41,7 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs: dict):
+    def find_user_by(self, **kwargs: dict) -> User:
         """return keyword argument"""
 
         if hasattr(User, str(kwargs.keys)):
