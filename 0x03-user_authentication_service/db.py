@@ -5,7 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.exc import NoResultFound, InvalidRequestError
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 
 from user import Base, User
 
@@ -42,13 +43,12 @@ class DB:
 
     def find_user_by(self, **kwargs):
         """return keyword argument"""
-        VALID_FIELDS = ['id', 'email', 'hashed_password', 'session_id',
-                'reset_token']
 
-        if not kwargs or any(x not in VALID_FIELDS for x in kwargs):
+        if hasattr(User, str(kwargs.keys)):
             raise InvalidRequestError
         session = self._session
         try:
-            return session.query(User).filter_by(**kwargs).one()
+            response = session.query(User).filter_by(**kwargs).one()
+            return response
         except Exception:
             raise NoResultFound
