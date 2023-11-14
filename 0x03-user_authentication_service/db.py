@@ -52,3 +52,15 @@ class DB:
             return response
         except Exception:
             raise NoResultFound
+
+    def update_user(self, id: int, **kwargs) -> None:
+        """update an existing user record"""
+        user = self.find_user_by(id=id)
+        session = self._session
+        for x, y in kwargs.items():
+            if hasattr(User, x):
+                setattr(user, x, y)
+            else:
+                raise ValueError
+        session.commit()
+        return None
