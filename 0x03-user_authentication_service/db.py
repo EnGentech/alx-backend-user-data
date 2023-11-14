@@ -57,10 +57,9 @@ class DB:
         """update an existing user record"""
         user = self.find_user_by(id=id)
         session = self._session
-        for x, y in kwargs.items():
-            if hasattr(User, x):
-                setattr(user, x, y)
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                setattr(user, key, value)
             else:
                 raise ValueError
         session.commit()
-        return None
