@@ -32,7 +32,7 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    def add_user(self, email, hashed_password):
+    def add_user(self, email: str, hashed_password: str) -> str:
         """return User object and save to db"""
         if not email or not hashed_password:
             return
@@ -41,14 +41,14 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs: dict):
         """return keyword argument"""
-        VALID_FIELDS = ['id', 'email', 'hashed_password', 'session_id',
-                'reset_token']
-        if not kwargs or any(x not in VALID_FIELDS for x in kwargs):
+
+        if hasattr(User, str(kwargs.keys)):
             raise InvalidRequestError
         session = self._session
         try:
-            return session.query(User).filter_by(**kwargs).one()
+            response = session.query(User).filter_by(**kwargs).one()
+            return response
         except Exception:
             raise NoResultFound
