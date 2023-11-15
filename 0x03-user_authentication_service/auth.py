@@ -52,7 +52,7 @@ class Auth:
         except Exception:
             return False
 
-    def create_session(self, email: str):
+    def create_session(self, email: str) -> str:
         """create a session_id for a user"""
         try:
             response = self._db.find_user_by(email=email)
