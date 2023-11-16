@@ -3,7 +3,7 @@
 """
 
 
-from flask import Flask, jsonify, request, abort, make_response, redirect
+from flask import Flask, jsonify, request, abort, redirect
 from auth import Auth
 
 
